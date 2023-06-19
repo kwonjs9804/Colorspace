@@ -1,0 +1,15 @@
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.csproj.AssemblyReference.cache
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.GeneratedMSBuildEditorConfig.editorconfig
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.AssemblyInfoInputs.cache
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.AssemblyInfo.cs
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.csproj.CoreCompileInputs.cache
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/bin/Debug/net7.0/Colorspace
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/bin/Debug/net7.0/Colorspace.deps.json
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/bin/Debug/net7.0/Colorspace.runtimeconfig.json
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/bin/Debug/net7.0/Colorspace.dll
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/bin/Debug/net7.0/Colorspace.pdb
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.dll
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/refint/Colorspace.dll
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.pdb
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/Colorspace.genruntimeconfig.cache
+/Users/j_siki/Desktop/HYU/Programming/Colorspace/obj/Debug/net7.0/ref/Colorspace.dll
