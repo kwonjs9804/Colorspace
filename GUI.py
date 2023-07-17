@@ -1,22 +1,47 @@
 import sys
 import cv2
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import *
 
 
-class MainWindow(QMainWindow):
+class Project(QMainWindow):
 
     def __init__(self):
         super().__init__()
         self.initUI()
 
+    # 이미지 불러오기
+    def openFileNameDialog(self):
+        filename = QFileDialog.getOpenFileName(
+            self, '이미지 불러오기', ' ')
+
+        if fileName:
+            print(fileName)
+            self.sid = QImage(fileName).scaled(120, 120)
+
+        # if filename[0]:
+        #     pixmap = QPixmap(filename[0])
+        #     self.label.setPixmap(pixmap)
+        #     self.label.setContentsMargin(10, 50, 10, 10)
+        #     self.label.resizw(pixmap, width(), pixmap.height())
+        #     self.resize(pixmap.width(), pixmap.height())
+        # else:
+        #     messagebox.about(self, '이미지 낫 파운드')
+
     def initUI(self):
-        # 박스 선택 출력
-        self.lbl = QLabel('none', self)
-        self.lbl.move(100, 80)
-        # 불러오기 버튼
-        btn1 = QPushButton("load", self)
-        btn1.clicked.connect(self.btn_fun_FileLoad)
+        self.sid = QImage("lcdrgb.jpg").scaled(220, 220)
+
+        btn = QPushButton("load", self)
+        btn.clicked.connect(self.openFileNameDialog)
+
+        btn = QPushButton("ImageChange", self)
+        btn.resize(btn.sizeHint())
+        btn.move(20, 250)
+        btn.clicked.connect(self.openFileNameDialog)
+
+    #     self.setGeometry(1400, 250, 520, 400)
+    #     self.show()
+
         # 박스 및 항목
         cb = QComboBox(self)
         cb.addItem('Original')
@@ -28,14 +53,12 @@ class MainWindow(QMainWindow):
 
         vbox = QVBoxLayout()
         vbox.addStretch(1)
-        vbox.addStretch(1)
         vbox.addWidget(cb)
-        vbox.addWidget(self.lbl)
         vbox.addStretch(1)
 
         hbox = QHBoxLayout()
         hbox.addStretch(1)
-        hbox.addWidget(btn1)
+        hbox.addWidget(btn)
         hbox.addStretch(1)
         hbox.addLayout(vbox)
         hbox.addStretch(1)
@@ -57,20 +80,39 @@ class MainWindow(QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    # 이미지 불러오기
-    def btn_fun_FileLoad(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open File', ' ')
-        if fname[0]:
-            pixmap = QPixmap(fname[0])
-            self.label.setPixmap(pixmap)
-            self.label.setContentsMargin(10, 50, 10, 10)
-            self.label.resizw(pixmap, width(), pixmap.height())
-            self.resize(pixmap.width(), pixmap.height())
-        else:
-            QmessageBox.about(self, '이미지 낫 파운드')
+
+# -------------------------
+
+    # 이미지 출력
+
+
+    def paintEvent(self, event):
+        painter = QPainter()
+        painter.begin(self)
+        self.drawImage(painter)
+        painter.end()
+
+    # # 이미지 나란히 출력
+    def drawImage(self, painter):
+        painter.drawImage(10, 10, self.sid)
+        painter.drawImage(self.sid.width() + 20, 10,
+                          self.grayScale(self.sid.copy()))
+
+    # 이미지 색변환
+    def grayScale(self, image):
+        for i in range(self.sid.width()):
+            for j in range(self.sid.height()):
+                c = image.pixel(i, j)
+                gray = qGray(c)
+                alpha = qAlpha(c)
+                red = qRed(c)
+                green = qGreen(c)
+                blue = qBlue(c)
+                image.setPixel(i, j, qRgba(gray, gray, gray, alpha))
+        return image
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = MainWindow()
+    ex = Project()
     sys.exit(app.exec_())
