@@ -8,6 +8,7 @@ import sys
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import tempfile
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
@@ -16,6 +17,7 @@ class Project(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.loaded_image = None
 
     def initUI(self):
         self.setWindowTitle("MainWindow")
@@ -35,41 +37,50 @@ class Project(QMainWindow):
         self.setGeometry(500, 300, self.sid.width() + 200,
                          self.sid.height() + 200)
         # 전체 UI 리사이징
-        self.resize(640, 480)
+        self.resize(720, 480)
 
     def openFileNameDialog(self):
         fileName, _ = QFileDialog.getOpenFileName(
             self, '불러올 이미지를 선택하세요', " ", "All Files (*);;")
         if fileName:
             print(fileName)
+            src = cv2.imread(fileName)
+            self.loaded_image = src
             self.sid = QImage(fileName).scaled(250, 250)
 
     # 원본 이미지 출력
     def drawImage(self, painter):
-        painter.drawImage(100, 100, self.sid)
+        painter.drawImage(20, 100, self.sid)
 
     def paintEvent(self, event):
         painter = QPainter(self)
         self.drawImage(painter)
-        histogram_pixmap = self.histogram(self.sid).scaled(250, 250)
-        painter.drawPixmap(330, 100, 250, 250, histogram_pixmap)
+        histogram_image_path = self.histogram(self.sid)
+        if histogram_image_path:
+            histogram_pixmap = QPixmap(histogram_image_path).scaled(250, 250)
+            painter.drawPixmap(250, 100, 500, 250, histogram_pixmap)
 
     def histogram(self, image):
-        src = cv2.imread("lcdrgb.jpg")
-        gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-        result = np.zeros((src.shape[0], 256), dtype=np.uint8)
-        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
-        cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
-        for x, y in enumerate(hist):
-            cv2.line(result, (int(x), result.shape[0]), (int(
-                x), result.shape[0] - int(y)), 255)
-        dst = np.hstack([gray, result])
+        if self.loaded_image is not None:
+            gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_BGR2GRAY)
+            result = np.zeros(
+                (self.loaded_image.shape[0], 256), dtype=np.uint8)
+            hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+            cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
+            for x, y in enumerate(hist):
+                cv2.line(result, (int(x), result.shape[0]), (int(
+                    x), result.shape[0] - int(y)), 255)
+            dst = np.hstack([gray, result])
 
-        height, width = dst.shape
-        bytesPerLine = 3 * width
-        qimage = QImage(dst.data, width, height, bytesPerLine,
-                        QImage.Format_RGB888).rgbSwapped()
-        return QPixmap.fromImage(qimage)
+            temp_file = tempfile.NamedTemporaryFile(
+                suffix=".png", delete=False)
+            cv2.imwrite(temp_file.name, dst)
+            temp_file.close()
+
+            return temp_file.name
+        else:
+            print("Image not loaded!")
+            return None
 
 
 if __name__ == "__main__":

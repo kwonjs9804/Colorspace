@@ -1,0 +1,12 @@
+temp_022
+
+            height, width = dst.shape
+            bytesPerLine = 3 * width
+            qimage = QImage(dst.data, width, height, bytesPerLine,
+                            QImage.Format_RGB888).rgbSwapped()
+
+---------------------------------------------------------------
+    
+            bytesPerLine = 3 * width
+
+해당 줄에서 3을 조절하면 3X3이 수정이 되는 부분을 발견. 하지만 1X1로 출력하는 방법은 아직 미지수

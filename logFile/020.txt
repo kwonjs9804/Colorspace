@@ -1,10 +1,5 @@
 temp_020
 
-# Github 업로드
-# 경로: Website
-# git add .
-# git commit -m "edit soruce"
-# git push origin main
 
 import sys
 import cv2
