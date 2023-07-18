@@ -1,10 +1,9 @@
-temp_015
+temp_019
 
 import sys
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import CIE_XYZ_Curve
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
@@ -17,16 +16,20 @@ class Project(QMainWindow):
     def initUI(self):
         self.setWindowTitle("MainWindow")
         self.sid = QImage('lcdrgb.jpg')
-        self.sid.width = 200
-        self.sid.height = 20
 
         btn = QPushButton("ImageChange", self)
         btn.resize(btn.sizeHint())
         btn.move(260, 50)
         btn.clicked.connect(self.openFileNameDialog)
 
+        self.label = QLabel(self)
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+
+        self.setGeometry(500, 300, self.sid.width() + 200,
+                         self.sid.height() + 200)
         self.resize(640, 480)
-        self.show()
 
     def center(self):
         qr = self.frameGeometry()
@@ -39,18 +42,17 @@ class Project(QMainWindow):
             self, '불러올 이미지를 선택하세요', " ", "All Files (*);;")
         if fileName:
             print(fileName)
-            self.sid = QImage(fileName).scaled(200, 200)
+            self.sid = QImage(fileName).scaled(250, 250)
 
     def paintEvent(self, event):
-        painter = QPainter()
-        painter.begin(self)
+        painter = QPainter(self)
         self.drawImage(painter)
-        painter.end()
+
+        histogram_pixmap = self.histogram(self.sid).scaled(250, 250)
+        painter.drawPixmap(370, 100, histogram_pixmap)
 
     def drawImage(self, painter):
         painter.drawImage(100, 100, self.sid)
-        # painter.drawImage(self.sid.width() + 100,
-        #                   self.histogram())
 
     def histogram(self, image):
         src = cv2.imread("lcdrgb.jpg")
@@ -58,17 +60,41 @@ class Project(QMainWindow):
         result = np.zeros((src.shape[0], 256), dtype=np.uint8)
         hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
         cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
+
         for x, y in enumerate(hist):
             cv2.line(result, (int(x), result.shape[0]), (int(
                 x), result.shape[0] - int(y)), 255)
         dst = np.hstack([gray, result])
-        return dst
+
+        # dst 배열의 shape를 (height, width)로 수정
+        dst = dst[:, :dst.shape[1] // 2]
+
+        height, width = dst.shape
+        bytesPerLine = width
+        qimage = QImage(dst.data, width, height,
+                        bytesPerLine, QImage.Format_Indexed8)
+
+        # Create a new QImage with indexed color
+        indexed_image = QImage(qimage)
+
+        # Create a new QPixmap from the indexed QImage
+        pixmap = QPixmap.fromImage(indexed_image)
+
+        return pixmap
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = Project()
+    ex.show()
     sys.exit(app.exec_())
+
 
 ---------------------------------------------------------------
     
 
+    qimage = QImage(dst.data, width, height,
+TypeError: arguments did not match any overloaded call:
+  QImage(): too many arguments
+
+오류의 반복

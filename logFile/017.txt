@@ -1,10 +1,9 @@
-temp_015
+temp_017
 
 import sys
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import CIE_XYZ_Curve
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
@@ -17,8 +16,6 @@ class Project(QMainWindow):
     def initUI(self):
         self.setWindowTitle("MainWindow")
         self.sid = QImage('lcdrgb.jpg')
-        self.sid.width = 200
-        self.sid.height = 20
 
         btn = QPushButton("ImageChange", self)
         btn.resize(btn.sizeHint())
@@ -26,7 +23,15 @@ class Project(QMainWindow):
         btn.clicked.connect(self.openFileNameDialog)
 
         self.resize(640, 480)
-        self.show()
+
+        self.label = QLabel(self)
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+
+        self.setGeometry(100, 100, self.sid.width() + 20,
+                         self.sid.height() + 20)  # 윈도우 크기 조정
+        self.setWindowTitle('Image with Histogram')
 
     def center(self):
         qr = self.frameGeometry()
@@ -42,15 +47,12 @@ class Project(QMainWindow):
             self.sid = QImage(fileName).scaled(200, 200)
 
     def paintEvent(self, event):
-        painter = QPainter()
-        painter.begin(self)
+        painter = QPainter(self)
         self.drawImage(painter)
-        painter.end()
+        self.histogram(painter)
 
     def drawImage(self, painter):
         painter.drawImage(100, 100, self.sid)
-        # painter.drawImage(self.sid.width() + 100,
-        #                   self.histogram())
 
     def histogram(self, image):
         src = cv2.imread("lcdrgb.jpg")
@@ -58,17 +60,28 @@ class Project(QMainWindow):
         result = np.zeros((src.shape[0], 256), dtype=np.uint8)
         hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
         cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
+
         for x, y in enumerate(hist):
             cv2.line(result, (int(x), result.shape[0]), (int(
                 x), result.shape[0] - int(y)), 255)
         dst = np.hstack([gray, result])
-        return dst
+
+        height, width = dst.shape
+        bytesPerLine = 3 * width
+        qimage = QImage(dst.data, width, height, bytesPerLine,
+                        QImage.Format_RGB888).rgbSwapped()
+
+        pixmap = QPixmap.fromImage(qimage)
+        self.label.setPixmap(pixmap)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = Project()
+    ex.show()
     sys.exit(app.exec_())
+
 
 ---------------------------------------------------------------
     
-
+하나의 UI에 원본, 흑백, 히스토그램 모두 출력, 위치 및 크기엔 약간의 조절 필요
