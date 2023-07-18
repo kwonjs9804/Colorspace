@@ -1,0 +1,84 @@
+temp_014
+
+import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+import CIE_XYZ_Curve
+
+
+class Project(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("MainWindow")
+        self.sid = QImage('lcdrgb.jpg')
+        self.sid.width = 200
+        self.sid.height = 100
+
+        btn = QPushButton("ImageChange", self)
+        btn.resize(btn.sizeHint())
+        btn.move(260, 100)
+        btn.clicked.connect(self.openFileNameDialog)
+
+        self.resize(640, 480)
+        self.show()
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+    def paintEvent(self, event):
+        painter = QPainter()
+        painter.begin(self)
+        self.drawImage(painter)
+        painter.end()
+
+    def drawImage(self, painter):
+        painter.drawImage(100, 100, self.sid)
+        # painter.drawImage(self.sid.width() + 100,
+        #                   self.histogram())
+
+    def histogram(self, image):
+        src = cv2.imread("lcdrgb.jpg")
+        gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+        result = np.zeros((src.shape[0], 256), dtype=np.uint8)
+        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+        cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
+
+        for x, y in enumerate(hist):
+            cv2.line(result, (int(x), result.shape[0]), (int(
+                x), result.shape[0] - int(y)), 255)
+
+        dst = np.hstack([gray, result])
+        return dst
+
+    def openFileNameDialog(self):
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, '불러올 이미지를 선택하세요', " ", "All Files (*);;")
+
+        if fileName:
+            print(fileName)
+            self.sid = QImage(fileName).scaled(200, 200)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = Project()
+    sys.exit(app.exec_())
+
+
+
+
+---------------------------------------------------------------
+    
+def openFileNameDialog(self):
+        fileName, _ = QFileDialog.getOpenFileName(self, '불러올 이미지를 선택하세요', " ", "All Files (*);;")
+
+버튼을 누른 후 새로운 사진을 띄우는 코드를 구현함

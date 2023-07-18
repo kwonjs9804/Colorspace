@@ -1,0 +1,36 @@
+temp_003
+
+import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+import CIE_XYZ_Curve
+
+
+class Project(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.sid = QImage("lcdrgb.jpg").scaled(220, 220)
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = Project()
+    sys.exit(app.exec_())
+
+
+
+---------------------------------------------------------------
+
+UI가 뜨지 않음

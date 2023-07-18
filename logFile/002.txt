@@ -1,0 +1,31 @@
+temp_002
+
+import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+import CIE_XYZ_Curve
+
+
+class Project(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Project')
+        self.resize(500, 250)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = Project()
+    sys.exit(app.exec_())
+
+
+
+---------------------------------------------------------------
+
+정상적으로 작동은 하나, UI가 뜨지 않음

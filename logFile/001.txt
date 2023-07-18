@@ -1,0 +1,30 @@
+temp_001
+
+import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+import CIE_XYZ_Curve
+
+
+class Project(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def mainWindow(self):
+        self.setWindowTitle('Project')
+        self.resize(500, 250)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = Project()
+    sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+AttributeError: 'Project' object has no attribute 'initUI'

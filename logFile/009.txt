@@ -1,0 +1,68 @@
+temp_009
+
+import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, QPushButton
+from PyQt5.QtGui import QImage
+import CIE_XYZ_Curve
+
+
+class Project(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("MainWindow")
+        # self.sid = QImage("lcdrgb.png").scaled(300, 300)
+        btn = QPushButton("ImageChange", self)
+        btn.resize(btn.sizeHint())
+        btn.move(20, 250)
+        btn.clicked.connect(self.openFileNameDialog)
+        self.resize(500, 500)
+        self.show()
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+    def openFileNameDialog(self):
+        fileName = QFileDialog.getOpenFileName(self, 'Import')
+        if fileName:
+            print(fileName)
+            selg.sid = QImage(fileName).scaled(200, 200)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = Project()
+    sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, QPushButton
+from PyQt5.QtGui import QImage
+
+*이 아닌 특정 라이브러리를 직접 호출
+
+    def initUI(self):
+        self.setWindowTitle("MainWindow")
+        # self.sid = QImage("lcdrgb.png").scaled(300, 300)
+        btn = QPushButton("ImageChange", self)
+        btn.resize(btn.sizeHint())
+        btn.move(20, 250)
+        btn.clicked.connect(self.openFileNameDialog)
+        self.resize(500, 500)
+        self.show()
+
+    def openFileNameDialog(self):
+        fileName = QFileDialog.getOpenFileName(self, 'Import')
+        if fileName:
+            print(fileName)
+            selg.sid = QImage(fileName).scaled(200, 200)
+
+이미지를 불러오는 버튼과 함수를 구현

@@ -1,0 +1,93 @@
+temp_012
+
+import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+import CIE_XYZ_Curve
+
+
+class Project(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("MainWindow")
+        self.sid = QImage("lcdrgb.jpg").scaled(200, 200)
+
+        btn = QPushButton("ImageChange", self)
+        btn.resize(btn.sizeHint())
+        btn.move(260, 100)
+        btn.clicked.connect(self.openFileNameDialog)
+
+        self.resize(640, 480)
+        self.show()
+
+    def openFileNameDialog(self):
+        fileName = QFileDialog.getOpenFileName(self, 'Import')
+        if fileName:
+            print(fileName)
+            self.sid = QImage(fileName).scaled(200, 200)
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+    def paintEvent(self, event):
+        painter = QPainter()
+        painter.begin(self)
+        self.drawImage(painter)
+        painter.end()
+
+    def drawImage(self, painter):
+        painter.drawImage(10, 10, self.sid)
+        painter.drawImage(self.sid.width() + 20, 10,
+                          self.histogram(self.sid.copy()))
+
+    def histogram(self, image):
+        src = cv2.imread("lcdrgb.jpg")
+        gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+        result = np.zeros((src.shape[0], 256), dtype=np.uint8)
+
+        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+        cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
+
+        for x, y in enumerate(hist):
+            cv2.line(result, (int(x), result.shape[0]), (int(
+                x), result.shape[0] - int(y)), 255)
+
+        cv2.imshow("hist", result)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = Project()
+    sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+    def histogram(self, image):
+        src = cv2.imread("lcdrgb.jpg")
+        gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+        result = np.zeros((src.shape[0], 256), dtype=np.uint8)
+
+        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+        cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
+
+        for x, y in enumerate(hist):
+            cv2.line(result, (int(x), result.shape[0]), (int(
+                x), result.shape[0] - int(y)), 255)
+
+        cv2.imshow("hist", result)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+히스토그램 구현하는 함수를 def histogram에 선언

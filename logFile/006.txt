@@ -1,0 +1,41 @@
+temp_006
+
+import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+import CIE_XYZ_Curve
+
+
+class Project(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle
+        self.resize(400, 200)
+        self.show()
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex = Project()
+    sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+    def initUI(self):
+        self.setWindowTitle
+        self.resize(400, 200)
+        self.show()
+를 통해 띄우는 화면의 절대적 중앙부에 표시되게 하였으며, resize를 통해 ui의 크기를 수정함
