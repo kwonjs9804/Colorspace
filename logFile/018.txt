@@ -1,8 +1,4 @@
-# Github 업로드
-# 경로: Website
-# git add .
-# git commit -m "edit soruce"
-# git push origin main
+temp_018
 
 import sys
 import cv2
@@ -77,3 +73,8 @@ if __name__ == "__main__":
     ex = Project()
     ex.show()
     sys.exit(app.exec_())
+
+---------------------------------------------------------------
+    
+
+나란히 출력은 되나, 틀어진 3X3으로 출력이 됨
