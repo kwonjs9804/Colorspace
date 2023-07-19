@@ -1,8 +1,4 @@
-# Github 업로드
-# 경로: Website
-# git add .
-# git commit -m "edit soruce"
-# git push origin main
+temp_026
 
 import sys
 import cv2
@@ -91,3 +87,7 @@ if __name__ == "__main__":
     ex = Project()
     ex.show()
     sys.exit(app.exec_())
+
+---------------------------------------------------------------
+    
+롤백 포인트

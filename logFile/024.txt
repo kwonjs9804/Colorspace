@@ -1,6 +1,19 @@
 temp_024
 
-
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        self.drawImage(painter)
+        histogram_image = self.histogram(self.img)
+        if histogram_image:
+            original_width, original_height = self.loaded_image.shape[1], self.loaded_image.shape[0]
+            aspect_ratio = original_width / original_height
+            histogram_width = 300
+            histogram_height = int(histogram_width / aspect_ratio)
+            histogram_pixmap = QPixmap(histogram_image).scaled(
+                histogram_width, histogram_height)
+            painter.drawPixmap(300, 180, histogram_width,
+                               histogram_height, histogram_pixmap)
 
 ---------------------------------------------------------------
     
+출력되는 이미지 비율을 원본으로 유지하기 위해 추가하였으나, 히스토그램과 같이 출력이 되어, 남은 여백자리에 히스토그램이 들어가 비율이 달라짐

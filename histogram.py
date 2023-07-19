@@ -3,7 +3,7 @@ from PyQt5.QtGui import QImage, QPixmap
 import cv2
 import numpy as np
 
-src = cv2.imread("asdf.jpg")
+src = cv2.imread("asdf.png")
 gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
 result = np.zeros((src.shape[0], 256), dtype=np.uint8)
 hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
