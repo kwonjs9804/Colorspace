@@ -85,6 +85,9 @@ class Project(QMainWindow):
 
             return temp_file.name
 
+    # def RGB_histogram():
+    #     if self.loaded_image is not None:
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
