@@ -21,23 +21,21 @@ class Project(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle("MainWindow")
-        self.sid = QImage('lcdrgb.jpg')
+        self.sid = QImage('coder.png').scaled(100, 100)
+        self.img = QImage('coder.png').scaled(0, 0)
 
         # 불러오기 버튼
         btn = QPushButton("ImageChange", self)
         btn.resize(btn.sizeHint())
-        btn.move(260, 50)
+        btn.move(300, 120)
         btn.clicked.connect(self.openFileNameDialog)
-
-        # 히스토그램 이미지 라벨 적용 후 출력
-        self.label = QLabel(self)
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.label)
-        self.setLayout(layout)
-        self.setGeometry(500, 300, self.sid.width() + 200,
-                         self.sid.height() + 200)
         # 전체 UI 리사이징
         self.resize(720, 480)
+
+        # 원본 이미지 출력
+    def drawImage(self, painter):
+        painter.drawImage(310, 20, self.sid)
+        painter.drawImage(20, 150, self.img)
 
     def openFileNameDialog(self):
         fileName, _ = QFileDialog.getOpenFileName(
@@ -46,20 +44,19 @@ class Project(QMainWindow):
             print(fileName)
             src = cv2.imread(fileName)
             self.loaded_image = src
-            self.sid = QImage(fileName).scaled(250, 250)
+            self.img = QImage(fileName).scaled(250, 250)
 
-    # 원본 이미지 출력
-    def drawImage(self, painter):
-        painter.drawImage(20, 100, self.sid)
-
+        # 불러온 이미지와 흑백, 히스토그램 배치하는 부분
     def paintEvent(self, event):
         painter = QPainter(self)
         self.drawImage(painter)
-        histogram_image_path = self.histogram(self.sid)
-        if histogram_image_path:
-            histogram_pixmap = QPixmap(histogram_image_path).scaled(250, 250)
-            painter.drawPixmap(250, 100, 500, 250, histogram_pixmap)
+        histogram_image = self.histogram(self.img)
+        if histogram_image:
+            histogram_pixmap = QPixmap(histogram_image
+                                       ).scaled(250, 250)
+            painter.drawPixmap(250, 150, 500, 250, histogram_pixmap)
 
+        # 흑백/히스토그램
     def histogram(self, image):
         if self.loaded_image is not None:
             gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_BGR2GRAY)
@@ -78,9 +75,6 @@ class Project(QMainWindow):
             temp_file.close()
 
             return temp_file.name
-        else:
-            print("Image not loaded!")
-            return None
 
 
 if __name__ == "__main__":
