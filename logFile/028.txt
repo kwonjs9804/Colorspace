@@ -1,4 +1,4 @@
-temp_027
+temp_028
 
 import sys
 import cv2
@@ -24,8 +24,13 @@ class Project(QMainWindow):
         btn.resize(btn.sizeHint())
         btn.move(27, 120)
         btn.clicked.connect(self.openFileNameDialog)
-        # 전체 UI 리사이징
 
+        btn_histogram = QPushButton("Show Histogram", self)
+        btn_histogram.resize(btn_histogram.sizeHint())
+        btn_histogram.move(27, 150)
+        btn_histogram.clicked.connect(self.gray_histogram)
+
+        # 전체 UI 리사이징
         self.resize(1020, 640)
         self.center()
         self.show()
@@ -57,8 +62,7 @@ class Project(QMainWindow):
         self.drawImage(painter)
         histogram_image = self.gray_histogram(self.img)
         if histogram_image:
-            histogram_pixmap = QPixmap(histogram_image
-                                       ).scaledToWidth(500)
+            histogram_pixmap = QPixmap(histogram_image).scaledToWidth(500)
             painter.drawPixmap(300, 40, histogram_pixmap)
             # drawPixmap(x, y, width, height)
 
@@ -69,11 +73,11 @@ class Project(QMainWindow):
             hist = cv2.calcHist([self.img], [0], None, [256], [0, 256])
             cv2.normalize(hist, hist, 0, hist.shape[0], cv2.NORM_MINMAX)
             plt.plot(hist)
-
-            temp_file = tempfile.NamedTemporaryFile(delete=False)
-            temp_file.close()
-            cv2.imwrite(temp_file.name, self.loaded_image)
-            os.remove(temp_file.name)
+            plt.title('Gray Histogram')
+            plt.xlabel('Bins')
+            plt.ylabel('Frequency')
+            plt.xlim([0, 256])
+            plt.show()
 
 
 if __name__ == "__main__":
@@ -85,4 +89,7 @@ if __name__ == "__main__":
 
 ---------------------------------------------------------------
     
-히스토그램 부분을 다른 히스토그램 플롯으로 출력하기 위해 변경
+    painter.drawImage(40, 180, self.img)
+TypeError: arguments did not match any overloaded call:
+
+오류 발생, 중복 호출이어서 삭제 후 진행

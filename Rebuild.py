@@ -9,7 +9,6 @@ import sys
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import tempfile
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
@@ -19,6 +18,7 @@ class Project(QMainWindow):
         super().__init__()
         self.initUI()
         self.loaded_image = None
+        self.histogram_image = None
 
     def initUI(self):
         self.setWindowTitle("MainWindow")
@@ -29,6 +29,12 @@ class Project(QMainWindow):
         btn.resize(btn.sizeHint())
         btn.move(27, 120)
         btn.clicked.connect(self.openFileNameDialog)
+
+        btn_histogram = QPushButton("Show Histogram", self)
+        btn_histogram.resize(btn_histogram.sizeHint())
+        btn_histogram.move(27, 150)
+        btn_histogram.clicked.connect(self.gray_histogram)
+
         # 전체 UI 리사이징
         self.resize(1020, 640)
         self.center()
@@ -55,36 +61,25 @@ class Project(QMainWindow):
             # 불러온 이미지 원본
             self.img = QImage(fileName).scaledToWidth(250)
 
-        # 불러온 이미지와 흑백, 히스토그램 배치
     def paintEvent(self, event):
         painter = QPainter(self)
         self.drawImage(painter)
-        histogram_image = self.histogram(self.img)
-        if histogram_image:
-            histogram_pixmap = QPixmap(histogram_image
-                                       ).scaledToWidth(500)
+        if self.histogram_image:
+            histogram_pixmap = QPixmap(self.histogram_image).scaledToWidth(500)
             painter.drawPixmap(300, 40, histogram_pixmap)
-            # drawPixmap(x, y, width, height)
 
-        # 흑백/히스토그램
-    def histogram(self, image):
+    # 흑백/히스토그램
+    def gray_histogram(self, image):
         if self.loaded_image is not None:
-            gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_BGR2GRAY)
-            result = np.zeros(
-                (self.loaded_image.shape[0], 256), dtype=np.uint8)
-            hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
-            cv2.normalize(hist, hist, 0, result.shape[0], cv2.NORM_MINMAX)
-            for x, y in enumerate(hist):
-                cv2.line(result, (int(x), result.shape[0]), (int(
-                    x), result.shape[0] - int(y)), 255)
-            dst = np.hstack([gray, result])
-
-            temp_file = tempfile.NamedTemporaryFile(
-                suffix=".png", delete=False)
-            cv2.imwrite(temp_file.name, dst)
-            temp_file.close()
-
-            return temp_file.name
+            self.img = self.loaded_image
+            hist = cv2.calcHist([self.img], [0], None, [256], [0, 256])
+            cv2.normalize(hist, hist, 0, hist.shape[0], cv2.NORM_MINMAX)
+            plt.plot(hist)
+            plt.title('Gray Histogram')
+            plt.xlabel('Bins')
+            plt.ylabel('Frequency')
+            plt.xlim([0, 256])
+            plt.show()
 
 
 if __name__ == "__main__":

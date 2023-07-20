@@ -1,10 +1,9 @@
-temp_027
+temp_032
 
 import sys
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import tempfile
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
@@ -14,6 +13,7 @@ class Project(QMainWindow):
         super().__init__()
         self.initUI()
         self.loaded_image = None
+        self.histogram_image = None
 
     def initUI(self):
         self.setWindowTitle("MainWindow")
@@ -24,8 +24,13 @@ class Project(QMainWindow):
         btn.resize(btn.sizeHint())
         btn.move(27, 120)
         btn.clicked.connect(self.openFileNameDialog)
-        # 전체 UI 리사이징
 
+        btn_histogram = QPushButton("Show Histogram", self)
+        btn_histogram.resize(btn_histogram.sizeHint())
+        btn_histogram.move(27, 150)
+        btn_histogram.clicked.connect(self.gray_histogram)
+
+        # 전체 UI 리사이징
         self.resize(1020, 640)
         self.center()
         self.show()
@@ -51,29 +56,25 @@ class Project(QMainWindow):
             # 불러온 이미지 원본
             self.img = QImage(fileName).scaledToWidth(250)
 
-        # 불러온 이미지와 흑백, 히스토그램 배치
     def paintEvent(self, event):
         painter = QPainter(self)
         self.drawImage(painter)
-        histogram_image = self.gray_histogram(self.img)
-        if histogram_image:
-            histogram_pixmap = QPixmap(histogram_image
-                                       ).scaledToWidth(500)
+        if self.histogram_image:
+            histogram_pixmap = QPixmap(self.histogram_image).scaledToWidth(500)
             painter.drawPixmap(300, 40, histogram_pixmap)
-            # drawPixmap(x, y, width, height)
 
-        # 흑백/히스토그램
+    # 흑백/히스토그램
     def gray_histogram(self, image):
         if self.loaded_image is not None:
             self.img = self.loaded_image
             hist = cv2.calcHist([self.img], [0], None, [256], [0, 256])
             cv2.normalize(hist, hist, 0, hist.shape[0], cv2.NORM_MINMAX)
             plt.plot(hist)
-
-            temp_file = tempfile.NamedTemporaryFile(delete=False)
-            temp_file.close()
-            cv2.imwrite(temp_file.name, self.loaded_image)
-            os.remove(temp_file.name)
+            plt.title('Gray Histogram')
+            plt.xlabel('Bins')
+            plt.ylabel('Frequency')
+            plt.xlim([0, 256])
+            plt.show()
 
 
 if __name__ == "__main__":
@@ -82,7 +83,6 @@ if __name__ == "__main__":
     ex.show()
     sys.exit(app.exec_())
 
-
 ---------------------------------------------------------------
-    
-히스토그램 부분을 다른 히스토그램 플롯으로 출력하기 위해 변경
+
+같은 부분에서 지속적 오류 발생으로 문단 삭제 후 재구성 예정
