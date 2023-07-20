@@ -4,6 +4,7 @@
 # git commit -m "edit soruce"
 # git push origin main
 
+
 import sys
 import cv2
 import matplotlib.pyplot as plt
@@ -84,9 +85,6 @@ class Project(QMainWindow):
             temp_file.close()
 
             return temp_file.name
-
-    # def RGB_histogram():
-    #     if self.loaded_image is not None:
 
 
 if __name__ == "__main__":
