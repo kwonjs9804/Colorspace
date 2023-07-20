@@ -1,9 +1,4 @@
-# Github 업로드
-# 경로: Website
-# git add .
-# git commit -m "edit soruce"
-# git push origin main
-
+temp_034
 
 import sys
 import cv2
@@ -12,7 +7,6 @@ import numpy as np
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 
 
 class Project(QMainWindow):
@@ -32,15 +26,15 @@ class Project(QMainWindow):
         btn.move(27, 120)
         btn.clicked.connect(self.openFileNameDialog)
 
-        btn_histogram = QPushButton("Gray Histogram", self)
+        btn_histogram = QPushButton("Show Histogram", self)
         btn_histogram.resize(btn_histogram.sizeHint())
-        btn_histogram.move(150, 50)
+        btn_histogram.move(27, 150)
         btn_histogram.clicked.connect(self.gray_histogram)
 
-        btn_histogram = QPushButton("RGB Histogram", self)
-        btn_histogram.resize(btn_histogram.sizeHint())
-        btn_histogram.move(150, 100)
-        btn_histogram.clicked.connect(self.RGB_histogram)
+        lay = QVBoxLayout()
+        lay.addWidget(self.canvas)
+        self.setLayout(lay)
+
         # 출력 UI
         self.resize(1020, 640)
         self.center()
@@ -52,10 +46,7 @@ class Project(QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        self.drawImage(painter)
-
+        # 원본 이미지 출력
     def drawImage(self, painter):
         painter.drawImage(40, 20, self.sid)
         painter.drawImage(40, 180, self.img)
@@ -70,32 +61,26 @@ class Project(QMainWindow):
             # 불러온 이미지 원본
             self.img = QImage(fileName).scaledToWidth(250)
 
-    # 흑백/히스토그램
-    def gray_histogram(self):
-        convertimg = self.loaded_image
-        hist = cv2.calcHist([convertimg], [0], None, [256], [0, 256])
-        cv2.normalize(hist, hist, 0, hist.shape[0], cv2.NORM_MINMAX)
-        plt.plot(hist, color='black')
-        plt.title('Gray Histogram')
-        plt.xlabel('Bins')
-        plt.ylabel('Frequency')
-        plt.xlim([0, 256])
-        plt.show()
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        self.drawImage(painter)
+        if self.histogram_image:
+            histogram_pixmap = QPixmap(self.histogram_image).scaledToWidth(500)
+            painter.drawPixmap(300, 40, histogram_pixmap)
 
-    def RGB_histogram(self):
-        convertimg = cv2.cvtColor(self.loaded_image, cv2.COLOR_BGR2RGB)
-        channels = cv2.split(convertimg)
-        colors = ['r', 'g', 'b']
-        for ch, color in zip(channels, colors):
-            hist = cv2.calcHist([ch], [0], None, [256], [0, 256])
-            plt.plot(hist, color=color)
-        hist = cv2.calcHist([convertimg], [0], None, [256], [0, 256])
-        plt.plot(hist, color='red')
-        plt.title('RGB Histogram')
-        plt.xlabel('Bins')
-        plt.ylabel('Frequency')
-        plt.xlim([0, 256])
-        plt.show()
+    # 흑백/히스토그램
+    def gray_histogram(self, image):
+        if self.loaded_image is not None:
+            self.img = self.loaded_image
+            hist = cv2.calcHist([self.img], [0], None, [256], [0, 256])
+            cv2.normalize(hist, hist, 0, hist.shape[0], cv2.NORM_MINMAX)
+            plt.plot(hist)
+            plt.title('Gray Histogram')
+            plt.xlabel('Bins')
+            plt.ylabel('Frequency')
+            plt.xlim([0, 256])
+            plt.show()
+            self.canvas = FigureCanvas(self.plt.plot(hist))
 
 
 if __name__ == "__main__":
@@ -103,3 +88,8 @@ if __name__ == "__main__":
     ex = Project()
     ex.show()
     sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+Figurecanvas 라이브러리를 추가하여 연동시키는 방법을 구상.

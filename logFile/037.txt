@@ -1,9 +1,4 @@
-# Github 업로드
-# 경로: Website
-# git add .
-# git commit -m "edit soruce"
-# git push origin main
-
+temp_037
 
 import sys
 import cv2
@@ -32,14 +27,14 @@ class Project(QMainWindow):
         btn.move(27, 120)
         btn.clicked.connect(self.openFileNameDialog)
 
-        btn_histogram = QPushButton("Gray Histogram", self)
+        btn_histogram = QPushButton("Show Histogram", self)
         btn_histogram.resize(btn_histogram.sizeHint())
-        btn_histogram.move(150, 50)
+        btn_histogram.move(27, 150)
         btn_histogram.clicked.connect(self.gray_histogram)
 
-        btn_histogram = QPushButton("RGB Histogram", self)
+        btn_histogram = QPushButton("Show Histogram", self)
         btn_histogram.resize(btn_histogram.sizeHint())
-        btn_histogram.move(150, 100)
+        btn_histogram.move(27, 180)
         btn_histogram.clicked.connect(self.RGB_histogram)
         # 출력 UI
         self.resize(1020, 640)
@@ -75,7 +70,7 @@ class Project(QMainWindow):
         convertimg = self.loaded_image
         hist = cv2.calcHist([convertimg], [0], None, [256], [0, 256])
         cv2.normalize(hist, hist, 0, hist.shape[0], cv2.NORM_MINMAX)
-        plt.plot(hist, color='black')
+        plt.plot(hist)
         plt.title('Gray Histogram')
         plt.xlabel('Bins')
         plt.ylabel('Frequency')
@@ -83,14 +78,13 @@ class Project(QMainWindow):
         plt.show()
 
     def RGB_histogram(self):
-        convertimg = cv2.cvtColor(self.loaded_image, cv2.COLOR_BGR2RGB)
+        convertimg = self.loaded_image
         channels = cv2.split(convertimg)
-        colors = ['r', 'g', 'b']
+        colors = ['b', 'g', 'r']
         for ch, color in zip(channels, colors):
             hist = cv2.calcHist([ch], [0], None, [256], [0, 256])
             plt.plot(hist, color=color)
-        hist = cv2.calcHist([convertimg], [0], None, [256], [0, 256])
-        plt.plot(hist, color='red')
+        plt.plot(hist)
         plt.title('RGB Histogram')
         plt.xlabel('Bins')
         plt.ylabel('Frequency')
@@ -103,3 +97,11 @@ if __name__ == "__main__":
     ex = Project()
     ex.show()
     sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+gray_histogram
+RGB_histogram
+
+그래프는 정상 출력, rgb는 brg -> rgb 변환과정 필요

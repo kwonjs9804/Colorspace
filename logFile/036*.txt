@@ -1,3 +1,5 @@
+temp_036
+
 # Github 업로드
 # 경로: Website
 # git add .
@@ -32,15 +34,11 @@ class Project(QMainWindow):
         btn.move(27, 120)
         btn.clicked.connect(self.openFileNameDialog)
 
-        btn_histogram = QPushButton("Gray Histogram", self)
+        btn_histogram = QPushButton("Show Histogram", self)
         btn_histogram.resize(btn_histogram.sizeHint())
-        btn_histogram.move(150, 50)
+        btn_histogram.move(27, 150)
         btn_histogram.clicked.connect(self.gray_histogram)
 
-        btn_histogram = QPushButton("RGB Histogram", self)
-        btn_histogram.resize(btn_histogram.sizeHint())
-        btn_histogram.move(150, 100)
-        btn_histogram.clicked.connect(self.RGB_histogram)
         # 출력 UI
         self.resize(1020, 640)
         self.center()
@@ -75,23 +73,8 @@ class Project(QMainWindow):
         convertimg = self.loaded_image
         hist = cv2.calcHist([convertimg], [0], None, [256], [0, 256])
         cv2.normalize(hist, hist, 0, hist.shape[0], cv2.NORM_MINMAX)
-        plt.plot(hist, color='black')
+        plt.plot(hist)
         plt.title('Gray Histogram')
-        plt.xlabel('Bins')
-        plt.ylabel('Frequency')
-        plt.xlim([0, 256])
-        plt.show()
-
-    def RGB_histogram(self):
-        convertimg = cv2.cvtColor(self.loaded_image, cv2.COLOR_BGR2RGB)
-        channels = cv2.split(convertimg)
-        colors = ['r', 'g', 'b']
-        for ch, color in zip(channels, colors):
-            hist = cv2.calcHist([ch], [0], None, [256], [0, 256])
-            plt.plot(hist, color=color)
-        hist = cv2.calcHist([convertimg], [0], None, [256], [0, 256])
-        plt.plot(hist, color='red')
-        plt.title('RGB Histogram')
         plt.xlabel('Bins')
         plt.ylabel('Frequency')
         plt.xlim([0, 256])
@@ -103,3 +86,10 @@ if __name__ == "__main__":
     ex = Project()
     ex.show()
     sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+    def gray_histogram(self, image):
+        if self.loaded_image is not None:
+두줄 제거 후 히스토그램 정상 출력

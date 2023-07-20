@@ -1,3 +1,5 @@
+temp_035
+
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout
 from matplotlib.backends.backend_qt5agg import FigureCanvas as FigureCanvas
@@ -52,3 +54,9 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
     sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+인터넷 상의 다른 코드를 가져와서 빌드 예정
+해당 코드는 상하로 두개의 그래프 표현 가능
