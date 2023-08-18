@@ -1,0 +1,38 @@
+temp_040
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from coordinate import point_x, point_y
+
+
+image = cv2.imread('BG.png')
+imageresize = cv2.resize(image, dsize=(512, 512))
+a = float(point_x)
+b = float(point_y)
+
+for i in range(0, 30):
+    circle = cv2.circle(imageresize, (a, b), 10, (0, 0, 255), 3)
+
+result = imageresize
+plt.imshow(cv2.cvtColor(result, cv2.COLOR_BGR2RGB))
+plt.show()
+
+
+---------------------------------------------------------------
+
+색좌표 위 점을 찍는 코드
+a, b로 값을 받아내어 유동적으로 좌표가 바뀌게끔 코드 작성 중
+
+    circle = cv2.circle(imageresize, (a, b), 10, (0, 0, 255), 3)
+cv2.error: OpenCV(4.8.0) :-1: error: (-5:Bad argument) in function 'circle'
+> Overload resolution failed:
+>  - Can't parse 'center'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'center'. Sequence item with index 0 has a wrong type
+
+오류 발생
+
+a = int(point_x)
+b = int(point_y)
+
+float를 int로 수정하여 해결

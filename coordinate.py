@@ -63,8 +63,8 @@ print(X_cor)
 print(Y_cor)
 print(Z_cor)
 
-x = X_cor/(X_cor + Y_cor + Z_cor)
-y = Y_cor/(X_cor + Y_cor + Z_cor)
+point_x = X_cor/(X_cor + Y_cor + Z_cor)
+point_y = Y_cor/(X_cor + Y_cor + Z_cor)
 
-print(x)
-print(y)
+print(point_x)
+print(point_y)
