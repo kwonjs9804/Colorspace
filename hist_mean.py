@@ -1,7 +1,7 @@
 import cv2
 
 # 이미지를 그레이스케일로 읽어옴
-image = cv2.imread('test.png', cv2.IMREAD_COLOR)
+image = cv2.imread('White.png', cv2.IMREAD_COLOR)
 b, g, r = cv2.split(image)
 inverse = cv2.merge((r, g, b))
 

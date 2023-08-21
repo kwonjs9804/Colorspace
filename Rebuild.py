@@ -12,10 +12,6 @@ import numpy as np
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-import coordinate
-import CF_plot
-import merge
-
 
 class Project(QMainWindow):
     def __init__(self):
@@ -77,11 +73,6 @@ class Project(QMainWindow):
         plt.ylabel('Frequency')
         plt.xlim([0, 256])
         plt.show()
-
-    # def Colorcoordinate(self):
-    #     image = self.loaded_image
-    #     coord = merge.result
-    #     overlay =
 
 
 if __name__ == "__main__":
