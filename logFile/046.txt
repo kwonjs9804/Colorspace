@@ -1,9 +1,4 @@
-# Github 업로드
-# 경로: Website
-# git add .
-# git commit -m "edit soruce"
-# git push origin main
-
+temp_046
 
 import sys
 import cv2
@@ -83,7 +78,6 @@ class Project(QMainWindow):
         plt.show()
 
     def coordinate(self):
-        # hist_mean
         if hasattr(self, 'loaded_image'):
             coord_img = self.loaded_image
         else:
@@ -91,7 +85,6 @@ class Project(QMainWindow):
         # image = cv2.imread(coord_img, cv2.IMREAD_COLOR)
         image = coord_img
         b, g, r = cv2.split(image)
-        inverse = cv2.merge((r, g, b))
 
         # 히스토그램 계산
         hist_r = cv2.calcHist([r], [0], None, [256], [0, 256])
@@ -120,10 +113,10 @@ class Project(QMainWindow):
         mean_value_b = sum_value_b / total_pixels_b
         print("B:", mean_value_b)
 
-        # CF_Cal
         B = mean_value_b/255
         G = mean_value_g/255
         R = mean_value_r/255
+
         print(B, G, R)
 
         Color_Filter.Blue_CF_ndarray = np.array(Color_Filter.Blue_CF, float)
@@ -133,7 +126,6 @@ class Project(QMainWindow):
             Color_Filter.Green_CF_ndarray + R*Color_Filter.Red_CF_ndarray
         All_ndarray = np.array(All, float)
 
-        # coordinate
         def SetWaveLengthGraph():
             major_xticks = list(range(400, 800+100, 100))
             minor_xticks = list(range(360-10, 830+10, 20))
@@ -155,20 +147,24 @@ class Project(QMainWindow):
         X_cor = X_ndarray.sum()
         Y_cor = Y_ndarray.sum()
         Z_cor = Z_ndarray.sum()
+
         print(X_cor)
         print(Y_cor)
         print(Z_cor)
 
         point_x = X_cor/(X_cor + Y_cor + Z_cor) * 1000
         point_y = 1000 - (Y_cor/(X_cor + Y_cor + Z_cor) * 1000)
+
         print(point_x)
         print(point_y)
 
-        # merge
         image = cv2.imread('BG2.png')
+
         a = int(point_x)
         b = int(point_y)
+
         print(a, b)
+
         for i in range(0, 30):
             circle = cv2.circle(image, (a, b), 10, (0, 0, 255), 3)
 
@@ -182,3 +178,40 @@ if __name__ == "__main__":
     ex = Project()
     ex.show()
     sys.exit(app.exec_())
+
+
+---------------------------------------------------------------
+
+외부 함수의 설정과 출력값을 가져와서 내부에서 출력을 해서
+불러온 이미지 대신 원본 함수의 값을 가져옴
+
+검산 결과:
+
+<외부: Green>
+R: [0.]
+G: [254.99998826]
+B: [0.]
+[0.] [0.99999995] [0.]
+Number of arguments: 1
+Argument(s) passed: ['/Users/j_siki/Desktop/HYU/Programming/Colorspace/merge.py']
+41.53386096209846
+70.06613520914908
+15.08212095914963
+327.85891097278227
+446.9137649710401
+327 446
+
+<내부: Red>
+R: [255.00001076]
+G: [0.]
+B: [0.]
+[0.] [0.] [1.00000004]
+41.53386096209846
+70.06613520914908
+15.08212095914963
+327.85891097278227
+446.9137649710401
+327 446
+
+
+CF_Cal 부분부터 적용이 안됨

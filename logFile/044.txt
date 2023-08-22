@@ -1,0 +1,23 @@
+temp_044
+
+    def coordinate(self):
+        coord_img = self.loaded_image
+        image = cv2.imread(coord_img, cv2.IMREAD_COLOR)
+        b, g, r = cv2.split(image)
+        inverse = cv2.merge((r, g, b))
+
+---------------------------------------------------------------
+
+오류발생
+TypeError: Can't convert object to 'str' for 'filename'
+
+    def coordinate(self):
+        if hasattr(self, 'loaded_image'):
+            coord_img = self.loaded_image
+        else:
+            print('none')
+        # image = cv2.imread(coord_img, cv2.IMREAD_COLOR)
+        image = coord_img
+        b, g, r = cv2.split(image)
+
+아래처럼 수정하여 해결
