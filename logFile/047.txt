@@ -1,6 +1,20 @@
 temp_047
 
+        CIE_XYZ_Curve.CIE_X_ndarray = np.array(CIE_XYZ_Curve.CIE_X, float)
+        CIE_XYZ_Curve.CIE_Y_ndarray = np.array(CIE_XYZ_Curve.CIE_Y, float)
+        CIE_XYZ_Curve.CIE_Z_ndarray = np.array(CIE_XYZ_Curve.CIE_Z, float)
+        X = All_ndarray * CIE_XYZ_Curve.CIE_X_ndarray
+        Y = All_ndarray * CIE_XYZ_Curve.CIE_Y_ndarray
+        Z = All_ndarray * CIE_XYZ_Curve.CIE_Z_ndarray
+        X_ndarray = np.array(X, float)
+        Y_ndarray = np.array(Y, float)
+        Z_ndarray = np.array(Z, float)
 
+        x = X_cor/(X_cor + Y_cor + Z_cor)
+        y = Y_cor/(X_cor + Y_cor + Z_cor)
+        print('x = ', x)
+        print('y = ', y)
 
 ---------------------------------------------------------------
 
+추가 수정 사항 반영
