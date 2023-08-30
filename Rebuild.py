@@ -13,7 +13,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import Color_Filter
 import CIE_XYZ_Curve
-import CF_Cal
 
 
 class Project(QMainWindow):
