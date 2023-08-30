@@ -1,0 +1,21 @@
+temp_053
+
+        self.x = QLabel("x = ", self)
+        self.x.move(170, 30)
+        self.y = QLabel("y = ", self)
+        self.y.move(170, 50)
+        self.y_cor_label = QLabel("휘도: ", self)
+        self.y_cor_label.move(170, 70)
+
+
+
+        x = X_cor/(X_cor + Y_cor + Z_cor)
+        self.x.setText(f"x: {x}")
+        y = Y_cor/(X_cor + Y_cor + Z_cor)
+        self.y.setText(f"y: {y}")
+        print('x = ', x)
+        print('y = ', y)
+
+---------------------------------------------------------------
+
+x, y 좌표를 출력하게 함

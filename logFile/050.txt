@@ -1,0 +1,27 @@
+temp_050
+
+        result = image
+
+        def DrawColor_Filter():
+            plt.figure(figsize=(10, 5))  # Set the figure size
+            plt.subplot(1, 2, 1)
+            plt.title('Color Filter Curve')
+            plt.plot(Color_Filter.RangeWavelength, B *
+                     Color_Filter.Blue_CF_ndarray, 'b', label='B')
+            plt.plot(Color_Filter.RangeWavelength, G *
+                     Color_Filter.Green_CF_ndarray, 'g', label='G')
+            plt.plot(Color_Filter.RangeWavelength, R *
+                     Color_Filter.Red_CF_ndarray, 'r', label='R')
+            plt.plot(Color_Filter.RangeWavelength,
+                     All_ndarray, 'k', label='I(ramda)')
+            plt.legend()
+
+            plt.subplot(1, 2, 2)
+            plt.title('Coordinate')
+            plt.imshow(cv2.cvtColor(result, cv2.COLOR_BGR2RGB))
+            plt.show()
+        DrawColor_Filter()
+
+---------------------------------------------------------------
+
+병렬 출력 완료

@@ -1,9 +1,4 @@
-# Github 업로드
-# 경로: Website
-# git add .
-# git commit -m "edit soruce"
-# git push origin main
-
+temp_052
 
 import sys
 import cv2
@@ -27,12 +22,8 @@ class Project(QMainWindow):
         self.ico = QImage('coder.png').scaled(100, 100)
         self.img = QImage('coder.png').scaled(0, 0)
 
-        self.x = QLabel("x = ", self)
-        self.x.move(170, 30)
-        self.y = QLabel("y = ", self)
-        self.y.move(170, 50)
-        self.y_cor_label = QLabel("휘도 : ", self)
-        self.y_cor_label.move(160, 70)
+        self.y_cor_label = QLabel("Y_cor: ", self)
+        self.y_cor_label.move(170, 80)
 
         # 버튼
         btn = QPushButton("ImageChange", self)
@@ -144,16 +135,14 @@ class Project(QMainWindow):
 
         X_cor = X_ndarray.sum()
         Y_cor = Y_ndarray.sum()
-        self.y_cor_label.setText(f"휘도 : {Y_cor}")
+        self.y_cor_label.setText(f"Y_cor: {Y_cor}")
         Z_cor = Z_ndarray.sum()
         print(X_cor)
         print(Y_cor)
         print(Z_cor)
 
         x = X_cor/(X_cor + Y_cor + Z_cor)
-        self.x.setText(f"x =  {x}")
         y = Y_cor/(X_cor + Y_cor + Z_cor)
-        self.y.setText(f"y =  {y}")
         print('x = ', x)
         print('y = ', y)
 
@@ -169,6 +158,7 @@ class Project(QMainWindow):
         print(a, b)
         for i in range(0, 30):
             circle = cv2.circle(image, (a, b), 10, (0, 0, 255), 3)
+
         result = image
 
         def DrawColor_Filter():
@@ -183,8 +173,6 @@ class Project(QMainWindow):
                      Color_Filter.Red_CF_ndarray, 'r', label='R')
             plt.plot(Color_Filter.RangeWavelength,
                      All_ndarray, 'k', label='I(ramda)')
-            plt.xlim([420, 780])
-            plt.ylim([0, 1.2])
             plt.legend()
 
             plt.subplot(1, 2, 2)
@@ -199,3 +187,7 @@ if __name__ == "__main__":
     ex = Project()
     ex.show()
     sys.exit(app.exec_())
+
+---------------------------------------------------------------
+
+히스토그램 병렬 출력, Y값 출력까지 완성된 모델

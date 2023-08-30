@@ -1,0 +1,8 @@
+temp_051
+
+        self.y_cor_label = QLabel("Y_cor: ", self)
+        self.y_cor_label.move(170, 80)
+
+---------------------------------------------------------------
+
+QLabel 함수를 활용하여, Y_cor 값을 UI에 출력되게 함

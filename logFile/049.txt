@@ -1,0 +1,26 @@
+temp_049
+
+        result = image
+        plt.imshow(cv2.cvtColor(result, cv2.COLOR_BGR2RGB))
+        plt.subplot(1, 2, 1)
+        plt.show()
+
+        def DrawColor_Filter():
+            SetWaveLengthGraph()
+            plt.title('Color Filter Curve')
+            plt.plot(Color_Filter.RangeWavelength, B *
+                     Color_Filter.Blue_CF_ndarray, 'b', label='B')
+            plt.plot(Color_Filter.RangeWavelength, G *
+                     Color_Filter.Green_CF_ndarray, 'g', label='G')
+            plt.plot(Color_Filter.RangeWavelength, R *
+                     Color_Filter.Red_CF_ndarray, 'r', label='R')
+            plt.plot(Color_Filter.RangeWavelength,
+                     All_ndarray, 'k', label='I(ramda)')
+            plt.legend()
+            plt.subplot(1, 2, 2)
+            plt.show()
+        DrawColor_Filter()
+
+---------------------------------------------------------------
+
+subplot 추가하여 그래프 병렬 표기 작업 진행
